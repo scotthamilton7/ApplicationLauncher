@@ -8,6 +8,7 @@ public final class AppDetails {
 
     public static final String APP_NAME = "App Name";
     public static final String APP_VERSION = "App Launcher • v0.1";
+    public static final String APP_VERSION_NUMBER = "0.1";
 
     public static final String SIDEBAR_TITLE = "  Launcher";
 

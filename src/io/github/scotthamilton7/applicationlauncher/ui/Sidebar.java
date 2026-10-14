@@ -9,15 +9,17 @@ import java.awt.*;
 
 public class Sidebar extends JPanel {
 
+    AppWindow window;
+
     int buttonImageWidht = 16;
     int buttonImageHeight = 16;
 
     Category[] categories;
 
-    public Sidebar() {
-        // TEMPORARY
-        // Create sample categories
-        categories = new Category[]{new Category("Cat1"), new Category("Cat2"), new Category("Cat3"), new Category("Cat4"), new Category("Cat5"), new Category("Cat6"), new Category("Cat7"), new Category("Cat8"), new Category("Cat9"), new Category("Cat10"), new Category("Cat11"), new Category("Cat12")};
+    public Sidebar(AppWindow window, Category[] categories) {
+        // Save parent window and categories
+        this.window = window;
+        this.categories = categories;
 
         // Create sidebar
         setBackground(Colors.BACKGROUND_TERTIARY);
@@ -57,6 +59,9 @@ public class Sidebar extends JPanel {
         for (Category category : categories) {
             SidebarButton btn = new SidebarButton(category.getName(), "/icons/imgCategory.png", buttonImageWidht, buttonImageHeight);
             navigation.add(btn);
+            btn.addActionListener(e -> {
+                window.setContent(new CategoryPage(category));
+            });
         }
 
         // Create separator between category and settings buttons
@@ -72,9 +77,15 @@ public class Sidebar extends JPanel {
         SidebarButton btnSettings = new SidebarButton("   Settings", "/icons/imgSettings.png",
                 buttonImageWidht,  buttonImageHeight);
         navigation.add(btnSettings);
+        btnSettings.addActionListener(e -> {
+            window.setContent(new SettingsPage());
+        });
         SidebarButton btnAbout = new SidebarButton("   About", "/icons/imgAbout.png",
                 buttonImageWidht, buttonImageHeight);
         navigation.add(btnAbout);
+        btnAbout.addActionListener(e -> {
+            window.setContent(new AboutPage());
+        });
 
         // Create and configure scroll panel for navigation JPanel
         JScrollPane scrollPane = new JScrollPane(navigation);
