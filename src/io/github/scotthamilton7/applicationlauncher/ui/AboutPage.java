@@ -5,132 +5,160 @@ import io.github.scotthamilton7.applicationlauncher.info.AppDetails;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * GUI page for application info, attributions, and links
+ */
 public class AboutPage extends ContentPage {
 
-    AppWindow window;
-    JPanel content;
+    /**
+     * Pre-defined section spacing
+     */
+    private static final int SECTION_SPACING = 20;
 
+    /**
+     * Parent application window
+     */
+    private final AppWindow window;
+
+    /**
+     * Container JPanel for info cards
+     */
+    private final JPanel content;
+
+    /**
+     * Constructs a new AboutPage
+     * @param window the application window in which the page is displayed
+     */
     public AboutPage(AppWindow window) {
-        // Save app window so license page can be loaded
         this.window = window;
 
-        // Set layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // Create page title
         TitleLabel title = new TitleLabel("About");
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
         title.setHorizontalAlignment(SwingConstants.LEFT);
-        title.setMaximumSize(new Dimension(Integer.MAX_VALUE, title.getPreferredSize().height));
+        title.setMaximumSize(new Dimension(
+                Integer.MAX_VALUE,
+                title.getPreferredSize().height
+        ));
         add(title);
 
-        // Add spacing between title and info cards
-        add(Box.createVerticalStrut(20));
+        add(Box.createVerticalStrut(SECTION_SPACING));
 
-        // Initialize content panel
         content = new JPanel();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
         content.setOpaque(false);
         content.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Create info cards
         createVersionCard();
-        content.add(Box.createVerticalStrut(20));
+        addCardSpacing();
+
         createAttributionsCard();
-        content.add(Box.createVerticalStrut(20));
+        addCardSpacing();
+
         createLicenseCard();
 
-        // Add cards to scroll pane
-        SmoothScrollPane scrollPane =  new SmoothScrollPane(content);
+        SmoothScrollPane scrollPane = new SmoothScrollPane(content);
         scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
         add(scrollPane);
     }
 
+    /**
+     * Creates a new info card with section heading
+     * @param title the section heading to display on the card
+     * @return the newly created info card
+     */
+    private InfoCard createCard(String title) {
+        InfoCard card = new InfoCard();
+
+        card.add(new SubTitle(title));
+        card.add(Box.createVerticalStrut(SECTION_SPACING));
+
+        return card;
+    }
+
+    /**
+     * Adds a specified info card to the container JPanel
+     * @param card the info card to add to the container
+     */
+    private void addCard(InfoCard card) {
+        card.setMaximumSize(new Dimension(
+                Integer.MAX_VALUE,
+                card.getPreferredSize().height
+        ));
+
+        content.add(card);
+    }
+
+    /**
+     * Add a spacer of pre-defined size (defined as {@code SECTION_SPACING})
+     */
+    private void addCardSpacing() {
+        content.add(Box.createVerticalStrut(SECTION_SPACING));
+    }
+
+    /**
+     * Creates an info card displaying the application version number along
+     * with a link to the application's GitHub page
+     */
     private void createVersionCard() {
-        // Create info card
-        InfoCard pnlAppVersion = new InfoCard();
+        InfoCard card = createCard("Version Information");
 
-        // Create subtitle
-        SubTitle lblVersionTitle = new SubTitle("Version Information");
-        pnlAppVersion.add(lblVersionTitle);
-
-        // Create spacer
-        pnlAppVersion.add(Box.createVerticalStrut(20));
-
-        // Add version number
-        InfoLabel lblVersion = new InfoLabel("App Version: v" + AppDetails.APP_VERSION_NUMBER);
-        pnlAppVersion.add(lblVersion);
-
-        // Add GitHub link
-        LinkLabel lblGitHub = new LinkLabel("Project GitHub", "https://github.com/scotthamilton7/ApplicationLauncher");
-        pnlAppVersion.add(lblGitHub);
-
-        // Set sizing and add to page
-        pnlAppVersion.setMaximumSize(new Dimension(
-                Integer.MAX_VALUE,
-                pnlAppVersion.getPreferredSize().height
+        card.add(new InfoLabel(
+                "App Version: v" + AppDetails.APP_VERSION_NUMBER
         ));
-        content.add(pnlAppVersion);
+
+        card.add(new LinkLabel(
+                "Project GitHub",
+                "https://github.com/scotthamilton7/ApplicationLauncher"
+        ));
+
+        addCard(card);
     }
 
+    /**
+     * Creates an info card displaying attributions to third-party resources
+     * used by the application.
+     */
     private void createAttributionsCard() {
-        // Create info card
-        InfoCard pnlAttributions = new  InfoCard();
+        InfoCard card = createCard("Attributions");
 
-        // Create subtitle
-        SubTitle lblAttributionsTitle = new SubTitle("Attributions");
-        pnlAttributions.add(lblAttributionsTitle);
-
-        // Create spacer
-        pnlAttributions.add(Box.createVerticalStrut(20));
-
-        // Add icons8 link
-        LinkLabel lblIcons8 = new LinkLabel("Icons by Icons8", "https://icons8.com");
-        pnlAttributions.add(lblIcons8);
-
-        // Add FlatLaf link
-        LinkLabel lblFlatLaf = new LinkLabel("Look and Feel by FlatLaf", "https://formdev.com");
-        pnlAttributions.add(lblFlatLaf);
-
-        // Add WrapLayout link
-        LinkLabel lblWrapLayout = new LinkLabel("WrapLayout by tips4java", "https://github.com/tips4java/tips4java");
-        pnlAttributions.add(lblWrapLayout);
-
-        // Set sizing and add to page
-        pnlAttributions.setMaximumSize(new Dimension(
-                Integer.MAX_VALUE,
-                pnlAttributions.getPreferredSize().height
+        card.add(new LinkLabel(
+                "Icons by Icons8",
+                "https://icons8.com"
         ));
-        content.add(pnlAttributions);
+
+        card.add(new LinkLabel(
+                "Look and Feel by FlatLaf",
+                "https://formdev.com"
+        ));
+
+        card.add(new LinkLabel(
+                "WrapLayout by tips4java",
+                "https://github.com/tips4java/tips4java"
+        ));
+
+        addCard(card);
     }
 
+    /**
+     * Creates an info card containing a link to view third-party licenses.
+     */
     private void createLicenseCard() {
-        // Create info card
-        InfoCard pnlLicenses = new  InfoCard();
+        InfoCard card = createCard("Licenses");
 
-        // Create subtitle
-        SubTitle lblAttributionsTitle = new SubTitle("Licenses");
-        pnlLicenses.add(lblAttributionsTitle);
+        LinkLabel licensesLink =
+                new LinkLabel("View third-party licenses", "");
 
-        // Create spacer
-        pnlLicenses.add(Box.createVerticalStrut(20));
-
-        // Add icons8 link
-        LinkLabel lblLicenses = new LinkLabel("View third-party licenses", "");
-        lblLicenses.addMouseListener(new java.awt.event.MouseAdapter() {
+        licensesLink.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 window.setContent(new LicensePage());
             }
         });
-        pnlLicenses.add(lblLicenses);
 
-        // Set sizing and add to page
-        pnlLicenses.setMaximumSize(new Dimension(
-                Integer.MAX_VALUE,
-                pnlLicenses.getPreferredSize().height
-        ));
-        content.add(pnlLicenses);
+        card.add(licensesLink);
+
+        addCard(card);
     }
-
 }
