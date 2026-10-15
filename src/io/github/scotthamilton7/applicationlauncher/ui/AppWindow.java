@@ -15,15 +15,17 @@ public class AppWindow extends JFrame {
     public AppWindow() {
         // Create application window
         setTitle("");
-        setSize(1000, 650);
+        setSize(900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setBackground(Colors.BACKGROUND_SECONDARY);
 
         // TEMPORARY
         // Create some categories
-        categories = new Category[]{new Category("Cat1"), new Category("Cat2"), new Category("Cat3"), new Category("Cat4")};
-        categories[0].addApp(new App("Name", "Description"));
+        categories = new Category[]{new Category("Browsers"), new Category("Cat2"), new Category("Cat3"), new Category("Cat4")};
+        categories[0].addApp(new App("Browser 1", "It's a browser"));
+        categories[0].addApp(new App("Browser 2", "It's another browser"));
+        categories[0].addApp(new App("Browser 3", "It's another another browser"));
 
         // Add sidebar to window
         add(new Sidebar(this, categories), BorderLayout.WEST);

@@ -84,27 +84,11 @@ public class Sidebar extends JPanel {
                 buttonImageWidht, buttonImageHeight);
         navigation.add(btnAbout);
         btnAbout.addActionListener(e -> {
-            window.setContent(new AboutPage());
+            window.setContent(new AboutPage(window));
         });
 
-        // Create and configure scroll panel for navigation JPanel
-        JScrollPane scrollPane = new JScrollPane(navigation);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setHorizontalScrollBarPolicy(
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
-        );
-        scrollPane.setVerticalScrollBarPolicy(
-                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
-        );
-
-        scrollPane.getVerticalScrollBar().setUnitIncrement(5);
-        scrollPane.setWheelScrollingEnabled(true);
-
-        // Keep the sidebar's background
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-
-        // Add sidebar buttons JPanel to sidebar
+        // Create and add scroll pane for navigation JPanel
+        SmoothScrollPane scrollPane = new SmoothScrollPane(navigation);
         add(scrollPane, BorderLayout.CENTER);
     }
 
