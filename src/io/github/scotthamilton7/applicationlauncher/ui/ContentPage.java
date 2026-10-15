@@ -11,6 +11,7 @@ public class ContentPage extends JPanel {
         setBackground(Colors.BACKGROUND_SECONDARY);
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 12, 10, 12));
+        setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
 }
