@@ -6,46 +6,93 @@ import io.github.scotthamilton7.applicationlauncher.structures.Category;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Subclass of {@link JFrame} to create a window with sidebar and content panel
+ */
 public class AppWindow extends JFrame {
 
-    JPanel pnlContentContainer;
+    /**
+     * The {@link JPanel} to display the current {@link ContentPage}
+     */
+    private JPanel pnlContentContainer;
 
-    Category[] categories;
+    /**
+     * The categories to be shown in the sidebar
+     */
+    private Category[] categories;
 
+    /**
+     * Constructs an {@link AppWindow} and adds a sidebar and content panel
+     */
     public AppWindow() {
-        // Create application window
+        configureWindow();
+
+        categories = createTemporaryCategories();
+
+        add(createSidebar(), BorderLayout.WEST);
+        add(createContentPanel(), BorderLayout.CENTER);
+
+        setVisible(true);
+    }
+
+    /**
+     * Configure the window's title, size, close operation, location, and background
+     */
+    private void configureWindow() {
         setTitle("");
         setSize(900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setBackground(Colors.BACKGROUND_SECONDARY);
+    }
 
-        // TEMPORARY
-        // Create some categories
-        categories = new Category[]{new Category("Browsers"), new Category("Cat2"), new Category("Cat3"), new Category("Cat4")};
-        categories[0].addApp(new App("Browser 1", "It's a browser"));
-        categories[0].addApp(new App("Browser 2", "It's another browser"));
-        categories[0].addApp(new App("Browser 3", "It's another another browser"));
+    /**
+     * Create some temporary categories for development purposes
+     * @return the array of temporary categories
+     */
+    private Category[] createTemporaryCategories() {
+        Category[] temp = new Category[]{
+                new Category("Browsers"),
+                new Category("Cat2"),
+                new Category("Cat3"),
+                new Category("Cat4")
+        };
 
-        // Add sidebar to window
-        add(new Sidebar(this, categories), BorderLayout.WEST);
+        temp[0].addApp(new App("Browser 1", "It's a browser"));
+        temp[0].addApp(new App("Browser 2", "It's another browser"));
+        temp[0].addApp(new App("Browser 3", "It's another another browser"));
 
-        // Add content page container to window
+        return temp;
+    }
+
+    /**
+     * Create a new sidebar
+     * @return the new sidebar
+     */
+    private JPanel createSidebar() {
+        return new Sidebar(this, categories);
+    }
+
+    /**
+     * Creates a {@link JPanel} to display the current in view {@link ContentPage}.
+     * The layout is set to {@link BorderLayout} and the background is set to {@code BACKGROUND_SECONDARY}
+     * @return the new {@link JPanel}
+     */
+    private JPanel createContentPanel() {
         pnlContentContainer = new JPanel();
         pnlContentContainer.setLayout(new BorderLayout());
         pnlContentContainer.setBackground(Colors.BACKGROUND_SECONDARY);
-        add(pnlContentContainer, BorderLayout.CENTER);
-
-        // Show application window
-        setVisible(true);
+        return pnlContentContainer;
     }
 
+    /**
+     * Replace the page currently in view with a specified {@link ContentPage}
+     * @param page the {@link ContentPage} to display
+     */
     public void setContent(ContentPage page) {
-        // Swap current page for new page
         pnlContentContainer.removeAll();
         pnlContentContainer.add(page, BorderLayout.CENTER);
 
-        // Repaint container panel to show new page
         pnlContentContainer.revalidate();
         pnlContentContainer.repaint();
     }
