@@ -1,14 +1,23 @@
 package io.github.scotthamilton7.applicationlauncher.structures;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Represents a category containing a collection of applications.
  */
 public class Category {
 
-    String name;
-    ArrayList<App> apps;
+    /**
+     * Category name to be displayed in the GUI
+     */
+    private final String name;
+
+    /**
+     * Collection of applications which belong in this category
+     */
+    private final List<App> apps;
 
     /**
      * Constructs a category with the specified name and an empty list of applications.
@@ -24,7 +33,6 @@ public class Category {
      * @return the name of the category
      */
     public String getName() {
-        // Return category name
         return name;
     }
 
@@ -33,17 +41,16 @@ public class Category {
      * @param app the application to add
      */
     public void addApp(App app) {
-        // Add new app to this category
         apps.add(app);
     }
 
     /**
      * Returns the list of applications belonging to this category.
+     * The list is returned in an unmodifiable form.
      * @return the list of applications in this category
      */
-    public ArrayList<App> getApps() {
-        // Return list of apps
-        return apps;
+    public List<App> getApps() {
+        return Collections.unmodifiableList(apps);
     }
 
 }

@@ -6,11 +6,18 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 
+/**
+ * Entry point for the Application Launcher
+ * Setups the FlatLaf theme and creates the main window
+ */
 public class Main {
 
+    /**
+     * Initializes FlatLaf and creates application window
+     */
     void main() {
-        // Set FlatLaf before creating any Swing components.
         FlatLightLaf.setup();
+
         SwingUtilities.invokeLater(() -> {
             try {
                 UIManager.setLookAndFeel(new FlatLightLaf());
@@ -18,8 +25,7 @@ public class Main {
                 System.err.println("Failed to initialise FlatLaf");
             }
 
-            // Create application window
-            AppWindow appWindow = new AppWindow();
+            new AppWindow();
         });
     }
 

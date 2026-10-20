@@ -6,20 +6,52 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * Subclass of {@link JPanel} displaying a specified application's
+ * details, and a launch button.
+ */
 public class AppCard extends JPanel {
 
-    App app;
+    /**
+     * The size of the application icon
+     */
+    public static final int APP_CARD_IMAGE_SIZE = 48;
 
+    /**
+     * The standard/fallback application icon
+     */
+    public static final String APP_CARD_DEFAULT_IMAGE = "/icons/imgPlay.png";
+
+    /**
+     * The application this {@code AppCard} represents
+     */
+    private final App app;
+
+    /**
+     * Constructs an {@link AppCard} for a specified application
+     * @param app the application to create the {@link AppCard} for
+     */
     public AppCard(App app) {
-        // Save app
         this.app = app;
 
-        // Set background color and border layout
+        configureCard();
+
+        add(createLogo());
+        add(createTitle());
+        add(createDescription());
+
+        add(Box.createVerticalGlue());
+        add(createLaunchButton());
+    }
+
+    /**
+     * Configure the {@link AppCard}'s background, layout, border, alignment,
+     * and dimensions
+     */
+    private void configureCard() {
         setBackground(Colors.BACKGROUND_PRIMARY);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(new EmptyBorder(10, 12, 10, 12));
-
-        // Align content to left
         setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Round corners and add border
@@ -27,50 +59,47 @@ public class AppCard extends JPanel {
                 "border: 10,12,10,12, #d8dde3, 1, 20"
         );
 
-        // Load app details
-        addLogo();
-        addTitle();
-        addDescription();
-        addLaunchButton();
-
-        // Set size
         Dimension cardSize = new Dimension(300, 180);
         setPreferredSize(cardSize);
         setMinimumSize(cardSize);
         setMaximumSize(cardSize);
     }
 
-    private void addLogo() {
-        // Set logo parameters
-        String imagePath = "/icons/imgPlay.png";
-        int imageWidth = 48;
-        int imageHeight = 48;
-
-        // Create scaled icon
-        SharpImageIcon icon = new SharpImageIcon(imagePath, imageWidth, imageHeight);
-
-        // Create logo
-        JLabel imageLabel = new JLabel(icon);
-        add(imageLabel);
+    /**
+     * Create a JLabel with the application's logo
+     * @return a {@link JLabel} containing the application's logo
+     */
+    private JLabel createLogo() {
+        return new JLabel(
+                new SharpImageIcon(
+                        APP_CARD_DEFAULT_IMAGE,
+                        APP_CARD_IMAGE_SIZE,
+                        APP_CARD_IMAGE_SIZE
+                )
+        );
     }
 
-    private void addTitle() {
-        //
-        TitleLabel lblTitle = new TitleLabel(app.getName());
-        add(lblTitle);
+    /**
+     * Create a title label with the application's name
+     * @return the application name label
+     */
+    private JLabel createTitle() {
+        return new TitleLabel(app.getName());
     }
 
-    private void addDescription() {
-        //
-        SubTitle lblDescription = new SubTitle(app.getDescription());
-        lblDescription.setBorder(new EmptyBorder(0, 10, 8, 10));
-        add(lblDescription);
+    /**
+     * Create a subtitle label with the application's description
+     * @return the application description label
+     */
+    private JLabel createDescription() {
+        return new SubTitle(app.getDescription(), new EmptyBorder(0, 10, 8, 10));
     }
 
-    private void addLaunchButton() {
-        // Push the button to the bottom of the card
-        add(Box.createVerticalGlue());
-
+    /**
+     * Create a {@link JButton} which launches the application
+     * @return the application launch button
+     */
+    private JButton createLaunchButton() {
         JButton btnLaunch = new JButton("Launch");
 
         // Ensure BoxLayout stretches the button horizontally
@@ -92,7 +121,7 @@ public class AppCard extends JPanel {
                 "margin: 4,8,4,8"
         );
 
-        add(btnLaunch);
+        return btnLaunch;
     }
 
 }

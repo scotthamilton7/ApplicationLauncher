@@ -7,45 +7,47 @@ import io.github.scotthamilton7.applicationlauncher.structures.Category;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Subclass of {@link ContentPage} to display applications in a given category
+ */
 public class CategoryPage extends ContentPage {
 
-    Category category;
+    /**
+     * The category of applications being displayed
+     */
+    private final Category category;
 
+    /**
+     * Constructs a {@link CategoryPage} displaying applications within the specified category
+     * @param category the specified category to display
+     */
     public CategoryPage(Category category) {
-        // Save category
         this.category = category;
 
-        // Set layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // Create page title
-        TitleLabel title = new TitleLabel(category.getName());
-        title.setAlignmentX(Component.LEFT_ALIGNMENT);
-        title.setHorizontalAlignment(SwingConstants.LEFT);
-        title.setMaximumSize(new Dimension(Integer.MAX_VALUE, title.getPreferredSize().height));
-        add(title);
-
-        // Add spacing between title and info cards
+        add(new TitleLabel(category.getName()));
         add(Box.createVerticalStrut(20));
-
-        // Create info cards
-        loadAppList();
+        add(createScrollingAppPane());
     }
 
-    private void loadAppList() {
+    /**
+     * Creates a {@link SmoothScrollPane} containing a {@link JPanel} with an {@link AppCard} for every
+     * application within this category
+     * @return the created {@link SmoothScrollPane}
+     */
+    private JScrollPane createScrollingAppPane() {
         JPanel appPanel = new JPanel(new WrapLayout(FlowLayout.LEFT, 12, 12));
         appPanel.setOpaque(false);
         appPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         for (App app : category.getApps()) {
-            AppCard appCard = new AppCard(app);
-            appPanel.add(appCard);
+            appPanel.add(new AppCard(app));
         }
 
-        // Create scroll pane for apps
         SmoothScrollPane scrollPane = new SmoothScrollPane(appPanel);
         scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-        add(scrollPane);
+        return scrollPane;
     }
 
 }
