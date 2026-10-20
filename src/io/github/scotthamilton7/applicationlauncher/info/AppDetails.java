@@ -15,17 +15,12 @@ public final class AppDetails {
     /**
      * Application name
      */
-    public static final String APP_NAME = "App Name";
-
-    /**
-     * Application version
-     */
-    public static final String APP_VERSION = "App Launcher • v0.1";
+    public static final String APP_NAME = "App Launcher";
 
     /**
      * Application version number
      */
-    public static final String APP_VERSION_NUMBER = "0.1";
+    public static final String APP_VERSION = "0.1";
 
     /**
      * Application title to be used on sidebar

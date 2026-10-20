@@ -105,7 +105,7 @@ public class AboutPage extends ContentPage {
         InfoCard card = createCard("Version Information");
 
         card.add(new InfoLabel(
-                "App Version: v" + AppDetails.APP_VERSION_NUMBER
+                "App Version: v" + AppDetails.APP_VERSION
         ));
 
         card.add(new LinkLabel(

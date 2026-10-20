@@ -7,97 +7,163 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * Subclass of {@link JPanel} for the application's sidebar
+ * <p>
+ * Displays the application's title, category navigation buttons, and links to the
+ * Settings and About pages
+ */
 public class Sidebar extends JPanel {
 
-    AppWindow window;
+    /**
+     * Represents the {@link AppWindow} that this sidebar belongs to
+     */
+    private final AppWindow window;
 
-    int buttonImageWidht = 16;
-    int buttonImageHeight = 16;
+    /**
+     * Pre-defined width of sidebar button images
+     */
+    private static final int BUTTON_IMAGE_WIDTH = 16;
 
-    Category[] categories;
+    /**
+     * Pre-defined height of sidebar button images
+     */
+    private static final int BUTTON_IMAGE_HEIGHT = 16;
 
+    /**
+     * The list of categories to create a {@link SidebarButton} for
+     */
+    private final Category[] categories;
+
+    /**
+     * Constructs the application sidebar
+     * @param window The {@link AppWindow} to create the sidebar for
+     * @param categories The categories to display in the navigation panel
+     */
     public Sidebar(AppWindow window, Category[] categories) {
-        // Save parent window and categories
         this.window = window;
         this.categories = categories;
 
-        // Create sidebar
+        configure();
+
+        add(createSidebarTitle(), BorderLayout.NORTH);
+        add(createNavigation(), BorderLayout.CENTER);
+    }
+
+    /**
+     * Configures the sidebar's background, preferred size, and layout
+     */
+    private void configure() {
         setBackground(Colors.BACKGROUND_TERTIARY);
         setPreferredSize(new Dimension(220, 0));
         setLayout(new BorderLayout());
-
-        // Add contents to sidebar
-        createSidebarTitle();
-        addCategories();
-        addVersionLabel();
     }
 
-    private void createSidebarTitle() {
-        // Logo and application name
-        JLabel logo = new JLabel(AppDetails.SIDEBAR_TITLE);
-        logo.setFont(logo.getFont().deriveFont(Font.BOLD, 18f));
-        logo.setForeground(Colors.TEXT_PRIMARY);
-        logo.setBorder(new EmptyBorder(25, 10, 25, 10));
-        add(logo, BorderLayout.NORTH);
+    /**
+     * Creates the label displayed at the top of the sidebar.
+     * @return the configured {@link TitleLabel}
+     */
+    private JLabel createSidebarTitle() {
+        TitleLabel lblTitle = new TitleLabel(AppDetails.SIDEBAR_TITLE);
+        lblTitle.setBorder(new EmptyBorder(25, 10, 25, 10));
+        return lblTitle;
     }
 
-    private void addCategories() {
-        // Create JPanel to contain sidebar buttons
+    /**
+     * Creates the scrollable navigation area containing the category
+     * and settings sections.
+     * @return A {@link SmoothScrollPane} containing the navigation panel
+     */
+    private JScrollPane createNavigation() {
+        JPanel navigation = createNavigationPanel();
+
+        addCategoriesSection(navigation);
+        addSettingsSection(navigation);
+
+        return new SmoothScrollPane(navigation);
+    }
+
+    /**
+     * Creates and configures the panel used to hold navigation components.
+     * @return the configured navigation panel
+     */
+    private JPanel createNavigationPanel() {
         JPanel navigation = new JPanel();
+
         navigation.setOpaque(false);
         navigation.setLayout(new BoxLayout(navigation, BoxLayout.Y_AXIS));
         navigation.setBorder(new EmptyBorder(10, 12, 10, 12));
 
-        // Add categories title to sidebar
-        JLabel categoriesLabel = new JLabel("Categories");
-        categoriesLabel.setForeground(Colors.TEXT_SECONDARY);
-        categoriesLabel.setBorder(new EmptyBorder(10, 10, 8, 10));
-        navigation.add(categoriesLabel);
+        return navigation;
+    }
 
-        // TEMPORARY
-        // Add sample categories to sidebar
+    /**
+     * Adds the category title and a navigation button for each category.
+     * Each button navigates to the related category page when clicked.
+     * @param navigation The panel that the category buttons have to be added to
+     */
+    private void addCategoriesSection(JPanel navigation) {
+        navigation.add(createSectionLabel("Categories"));
+
         for (Category category : categories) {
-            SidebarButton btn = new SidebarButton(category.getName(), "/icons/imgCategory.png", buttonImageWidht, buttonImageHeight);
-            navigation.add(btn);
+            SidebarButton btn = new SidebarButton(
+                    category.getName(),
+                    "/icons/imgCategory.png",
+                    BUTTON_IMAGE_WIDTH,
+                    BUTTON_IMAGE_HEIGHT
+            );
+
             btn.addActionListener(e -> {
                 window.setContent(new CategoryPage(category));
             });
+
+            navigation.add(btn);
         }
 
-        // Create separator between category and settings buttons
         navigation.add(Box.createVerticalStrut(20));
+    }
 
-        // Add settings title to sidebar
-        JLabel settingsLabel = new JLabel("Settings");
-        settingsLabel.setForeground(Colors.TEXT_SECONDARY);
-        settingsLabel.setBorder(new EmptyBorder(10, 10, 8, 10));
-        navigation.add(settingsLabel);
+    /**
+     * Adds navigation buttons for the Settings and About pages.
+     * @param navigation The panel that the buttons have to be added to
+     */
+    private void addSettingsSection(JPanel navigation) {
+        navigation.add(createSectionLabel("Settings"));
 
-        // Create settings and about buttons
-        SidebarButton btnSettings = new SidebarButton("   Settings", "/icons/imgSettings.png",
-                buttonImageWidht,  buttonImageHeight);
-        navigation.add(btnSettings);
+        SidebarButton btnSettings = new SidebarButton(
+                "Settings",
+                "/icons/imgSettings.png",
+                BUTTON_IMAGE_WIDTH,
+                BUTTON_IMAGE_HEIGHT
+        );
         btnSettings.addActionListener(e -> {
-            window.setContent(new SettingsPage());
+                window.setContent(new SettingsPage());
         });
-        SidebarButton btnAbout = new SidebarButton("   About", "/icons/imgAbout.png",
-                buttonImageWidht, buttonImageHeight);
-        navigation.add(btnAbout);
+        navigation.add(btnSettings);
+
+        SidebarButton btnAbout = new SidebarButton(
+                "About",
+                "/icons/imgAbout.png",
+                BUTTON_IMAGE_WIDTH,
+                BUTTON_IMAGE_HEIGHT
+        );
         btnAbout.addActionListener(e -> {
             window.setContent(new AboutPage(window));
         });
-
-        // Create and add scroll pane for navigation JPanel
-        SmoothScrollPane scrollPane = new SmoothScrollPane(navigation);
-        add(scrollPane, BorderLayout.CENTER);
+        navigation.add(btnAbout);
     }
 
-    private void addVersionLabel() {
-        // Create and add version info label to sidebar
-        JLabel version = new JLabel("  " + AppDetails.APP_VERSION);
-        version.setForeground(Colors.TEXT_SECONDARY);
-        version.setBorder(new EmptyBorder(15, 10, 15, 10));
-        add(version, BorderLayout.SOUTH);
+    /**
+     * Creates a styled label for a sidebar section heading.
+     * @param text The text to be displayed in the label
+     * @return The configured section label
+     */
+    private JLabel createSectionLabel(String text) {
+        JLabel sectionLabel = new JLabel(text);
+        sectionLabel.setForeground(Colors.TEXT_SECONDARY);
+        sectionLabel.setBorder(new EmptyBorder(10, 10, 8, 10));
+
+        return sectionLabel;
     }
 
 }
