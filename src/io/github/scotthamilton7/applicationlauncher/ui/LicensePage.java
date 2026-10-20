@@ -9,21 +9,36 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+/**
+ * Subclass of {@link ContentPage} to display third-party licenses of libraries and utilities used
+ * in the development of this application
+ */
 public class LicensePage extends ContentPage {
 
     public LicensePage() {
-        // Use BorderLayout so the scroll pane fills the available content page space[cite: 9]
         setLayout(new BorderLayout(0, 15));
 
-        // Page title[cite: 18]
         TitleLabel title = new TitleLabel("Licenses & Notices");
         add(title, BorderLayout.NORTH);
 
-        // Load both files
+        SmoothScrollPane scrollPane = new SmoothScrollPane(
+                createLicenseCard(),
+                true,
+                true,
+                16
+        );
+        add(scrollPane, BorderLayout.CENTER);
+    }
+
+    /**
+     * Loads the contents of {@code /licenses/NOTICE.txt} and {@code /licenses/LICENSE.txt}, adds them
+     * to a {@link JLabel} and creates a new {@link InfoCard} to display it
+     * @return the new {@link InfoCard}
+     */
+    private JPanel createLicenseCard() {
         String noticeText = loadResourceText("/licenses/NOTICE.txt");
         String apacheLicenseText = loadResourceText("/licenses/LICENSE.txt");
 
-        // Format combined text as HTML with preformatted blocks
         String combinedHtml = "<html><body style='font-family: sans-serif; font-size: 11px;'>"
                 + "<h3 style='margin: 0; color: #212529;'>Notices & Third-Party Attributions</h3>"
                 + "<pre style='font-family: monospace; font-size: 11px;'>" + escapeHtml(noticeText) + "</pre>"
@@ -33,27 +48,27 @@ public class LicensePage extends ContentPage {
                 + "</body></html>";
 
         JLabel lblLicense = new JLabel(combinedHtml);
-        lblLicense.setForeground(Colors.TEXT_PRIMARY); //[cite: 8]
+        lblLicense.setForeground(Colors.TEXT_PRIMARY);
         lblLicense.setVerticalAlignment(SwingConstants.TOP);
 
-        // Wrap inside an InfoCard for consistent rounded styling[cite: 10]
-        InfoCard card = new InfoCard(); //[cite: 10]
+        InfoCard card = new InfoCard();
         card.setLayout(new BorderLayout());
         card.setBorder(new EmptyBorder(16, 16, 16, 16));
         card.add(lblLicense, BorderLayout.CENTER);
 
-        // Put inside scroll pane
-        JScrollPane scrollPane = new JScrollPane(card);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-
-        add(scrollPane, BorderLayout.CENTER);
+        return card;
     }
 
+    /**
+     * Load content of a specified text file within the {@code /res} directory
+     * @param resourcePath The path of the file to load. E.g. for a file at location
+     * {@code /res/dir/file.txt}, the parameter {@code /dir/file.txt} should be passed
+     * @return If the file is found and successfully read the contents of the file are returned.
+     * <p>
+     * If the file could not be found or loaded, an error message is returned.
+     * <p>
+     * E.g. {@code "File not found"} or {@code "Failed to load"}
+     */
     private String loadResourceText(String resourcePath) {
         try (InputStream is = getClass().getResourceAsStream(resourcePath)) {
             if (is == null) {
@@ -67,6 +82,11 @@ public class LicensePage extends ContentPage {
         }
     }
 
+    /**
+     * Replace special symbols {@code &}, {@code <}, and {@code >} with HTML escape characters
+     * @param text the original text with special characters {@code &}, {@code <}, and {@code >}
+     * @return the text with HTML escape characters {@code &amp}, {@code &lt}, and {@code &gt}
+     */
     private String escapeHtml(String text) {
         return text.replace("&", "&amp;")
                 .replace("<", "&lt;")

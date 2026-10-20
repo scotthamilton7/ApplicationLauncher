@@ -33,7 +33,6 @@ public class Category {
      * @return the name of the category
      */
     public String getName() {
-        // Return category name
         return name;
     }
 
@@ -42,7 +41,6 @@ public class Category {
      * @param app the application to add
      */
     public void addApp(App app) {
-        // Add new app to this category
         apps.add(app);
     }
 
@@ -52,7 +50,6 @@ public class Category {
      * @return the list of applications in this category
      */
     public List<App> getApps() {
-        // Return list of apps
         return Collections.unmodifiableList(apps);
     }
 
