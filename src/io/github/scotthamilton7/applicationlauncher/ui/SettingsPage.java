@@ -3,8 +3,14 @@ package io.github.scotthamilton7.applicationlauncher.ui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Subclass of {@link ContentPage} for displaying changeable settings
+ */
 public class SettingsPage extends ContentPage {
 
+    /**
+     * Constructs a new {@link SettingsPage}
+     */
     public SettingsPage() {
         // Set layout
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
