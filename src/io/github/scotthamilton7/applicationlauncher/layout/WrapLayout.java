@@ -10,7 +10,7 @@
  * Blog:   https://tips4java.wordpress.com/2008/11/06/wrap-layout/
  *
  * Copyright (c) 2023 Rob Camick
- * Licensed under the MIT License. See NOTICE.txt in the project root for full license text.
+ * Licensed under the MIT License. See /res/licences/NOTICE.txt for full license text.
  */
 
 package io.github.scotthamilton7.applicationlauncher.layout;
