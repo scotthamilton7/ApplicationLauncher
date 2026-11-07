@@ -41,6 +41,15 @@ public class Category {
      * @param app the application to add
      */
     public void addApp(App app) {
+        if (getApp(app.getId()) != null) {
+            System.err.printf(
+                    "Error - cannot add app with the same ID (%s) to the same category (%s)%n",
+                    app.getId(),
+                    name
+            );
+            return;
+        }
+
         apps.add(app);
     }
 
@@ -51,6 +60,21 @@ public class Category {
      */
     public List<App> getApps() {
         return Collections.unmodifiableList(apps);
+    }
+
+    /**
+     * Get an application by its id in this category
+     * @param id the id of the application to find
+     * @return the application, or {@code null} if it was not found
+     */
+    public App getApp(String id) {
+        for (App app : apps) {
+            if (app.getId().equals(id)) {
+                return app;
+            }
+        }
+
+        return null;
     }
 
 }

@@ -105,6 +105,12 @@ public class Sidebar extends JPanel {
     private void addCategoriesSection(JPanel navigation) {
         navigation.add(createSectionLabel("Categories"));
 
+        if (categories.length < 1) {
+            navigation.add(new InfoLabel("No categories"));
+            navigation.add(Box.createVerticalStrut(20));
+            return;
+        }
+
         for (Category category : categories) {
             SidebarButton btn = new SidebarButton(
                     category.getName(),
