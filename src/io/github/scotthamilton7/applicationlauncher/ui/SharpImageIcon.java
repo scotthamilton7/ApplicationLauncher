@@ -41,6 +41,16 @@ public class SharpImageIcon implements Icon {
     }
 
     /**
+     * Constructs a new {@link SharpImageIcon} taking a standard ImageIcon
+     * @param image The {@link ImageIcon} to create the {@link SharpImageIcon} with
+     */
+    public SharpImageIcon(ImageIcon image) {
+        this.image = image.getImage();
+        this.width = image.getIconWidth();
+        this.height = image.getIconHeight();
+    }
+
+    /**
      * Paints this icon at the specified position, scaling the image to account
      * for the display's HiDPI scale factor.
      * <p>
@@ -95,4 +105,12 @@ public class SharpImageIcon implements Icon {
      */
     @Override
     public int getIconHeight() { return height; }
+
+    /**
+     * Get the contained image from this icon
+     * @return the {@link Image} in this SharpImageIcon
+     */
+    public Image getImage() {
+        return image;
+    }
 }

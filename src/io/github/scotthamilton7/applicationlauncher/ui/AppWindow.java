@@ -5,6 +5,10 @@ import io.github.scotthamilton7.applicationlauncher.structures.Category;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Subclass of {@link JFrame} to create a window with sidebar and content panel
@@ -57,10 +61,6 @@ public class AppWindow extends JFrame {
                 new Category("Cat3"),
                 new Category("Cat4")
         };
-
-        temp[0].addApp(new App("Browser 1", "It's a browser"));
-        temp[0].addApp(new App("Browser 2", "It's another browser"));
-        temp[0].addApp(new App("Browser 3", "It's another another browser"));
 
         return temp;
     }

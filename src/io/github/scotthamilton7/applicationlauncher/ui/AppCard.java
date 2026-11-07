@@ -1,10 +1,12 @@
 package io.github.scotthamilton7.applicationlauncher.ui;
 
+import io.github.scotthamilton7.applicationlauncher.launcher.Launcher;
 import io.github.scotthamilton7.applicationlauncher.structures.App;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Subclass of {@link JPanel} displaying a specified application's
@@ -66,17 +68,28 @@ public class AppCard extends JPanel {
     }
 
     /**
-     * Create a JLabel with the application's logo
+     * Create a JLabel with the application's logo, or the default Play icon if no icon has been set
      * @return a {@link JLabel} containing the application's logo
      */
     private JLabel createLogo() {
-        return new JLabel(
+        SharpImageIcon icon = app.getAppIcon();
+
+        if (icon == null) {
+            return new JLabel(
                 new SharpImageIcon(
                         APP_CARD_DEFAULT_IMAGE,
                         APP_CARD_IMAGE_SIZE,
                         APP_CARD_IMAGE_SIZE
                 )
+            );
+        }
+
+        Image scaledImage = icon.getImage().getScaledInstance(
+                APP_CARD_IMAGE_SIZE, APP_CARD_IMAGE_SIZE,
+                Image.SCALE_SMOOTH
         );
+        SharpImageIcon scaledIcon = new SharpImageIcon(new ImageIcon(scaledImage));
+        return new  JLabel(scaledIcon);
     }
 
     /**
@@ -120,6 +133,14 @@ public class AppCard extends JPanel {
                 "hoverBackground: #f0f2f5; " +
                 "margin: 4,8,4,8"
         );
+
+        btnLaunch.addActionListener(e -> {
+            try {
+                Launcher.launch(app.getCommand(), app.getArguments());
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex.toString());
+            }
+        });
 
         return btnLaunch;
     }
