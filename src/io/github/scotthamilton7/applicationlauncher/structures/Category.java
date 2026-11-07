@@ -42,11 +42,11 @@ public class Category {
      */
     public void addApp(App app) {
         if (getApp(app.getId()) != null) {
-            IO.println(String.format(
-                    "Error - cannot add app with the same ID (%s) to the same category (%s)",
+            System.err.printf(
+                    "Error - cannot add app with the same ID (%s) to the same category (%s)%n",
                     app.getId(),
                     name
-            ));
+            );
             return;
         }
 

@@ -1,10 +1,12 @@
 package io.github.scotthamilton7.applicationlauncher.ui;
 
+import io.github.scotthamilton7.applicationlauncher.io.AppConfig;
 import io.github.scotthamilton7.applicationlauncher.structures.App;
 import io.github.scotthamilton7.applicationlauncher.structures.Category;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,7 +25,7 @@ public class AppWindow extends JFrame {
     /**
      * The categories to be shown in the sidebar
      */
-    private Category[] categories;
+    private List<Category> categories;
 
     /**
      * Constructs an {@link AppWindow} and adds a sidebar and content panel
@@ -31,7 +33,12 @@ public class AppWindow extends JFrame {
     public AppWindow() {
         configureWindow();
 
-        categories = createTemporaryCategories();
+        try {
+            this.categories = AppConfig.loadCategories();
+        } catch (IOException e) {
+            System.err.println("Failed to load apps.csv:");
+            e.printStackTrace();
+        }
 
         add(createSidebar(), BorderLayout.WEST);
         add(createContentPanel(), BorderLayout.CENTER);
@@ -51,26 +58,11 @@ public class AppWindow extends JFrame {
     }
 
     /**
-     * Create some temporary categories for development purposes
-     * @return the array of temporary categories
-     */
-    private Category[] createTemporaryCategories() {
-        Category[] temp = new Category[]{
-                new Category("Browsers"),
-                new Category("Cat2"),
-                new Category("Cat3"),
-                new Category("Cat4")
-        };
-
-        return temp;
-    }
-
-    /**
      * Create a new sidebar
      * @return the new sidebar
      */
     private JPanel createSidebar() {
-        return new Sidebar(this, categories);
+        return new Sidebar(this, categories.toArray(new Category[0]));
     }
 
     /**

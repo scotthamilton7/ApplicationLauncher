@@ -38,6 +38,8 @@ public class App {
 
     private SharpImageIcon appIcon;
 
+    private String rawIconPath = "";
+
     /**
      * Constructs an application with the specified details
      * @param name the application name
@@ -152,6 +154,14 @@ public class App {
      */
     public SharpImageIcon getAppIcon() {
         return appIcon;
+    }
+
+    public void setRawIconPath(String path) {
+        this.rawIconPath = path != null ? path : "";
+    }
+
+    public String getRawIconPath() {
+        return rawIconPath;
     }
 
 }
