@@ -42,6 +42,7 @@ public class AppWindow extends JFrame {
 
         add(createSidebar(), BorderLayout.WEST);
         add(createContentPanel(), BorderLayout.CENTER);
+        setContent(new CategoryPage(categories.getFirst()));
 
         setVisible(true);
     }
