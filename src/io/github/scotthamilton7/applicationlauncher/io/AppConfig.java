@@ -77,6 +77,8 @@ public final class AppConfig {
             categories.add(newCat);
         }
 
+        categories.sort(Comparator.comparing(Category::getName));
+
         return categories;
     }
 
